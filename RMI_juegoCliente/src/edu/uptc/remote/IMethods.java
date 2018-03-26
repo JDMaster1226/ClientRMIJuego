@@ -16,4 +16,5 @@ public interface IMethods extends Remote{
 	public boolean isJuegoIniciado() throws RemoteException;
 	public boolean isJuegoTerminado() throws RemoteException;
 	public int[][] getMatriz() throws RemoteException;
+	public int getTurno() throws RemoteException;
 }
