@@ -9,12 +9,27 @@ import edu.uptc.conexion.Conexion;
 import edu.uptc.remote.IMethods;
 
 public class MainClient {
-
-	public static void main(String[] args) {
-		MainClient mainClient = new MainClient();
-		try {
-			Conexion conexion = new Conexion();
-			IMethods remoteMethods= conexion.searchServer();
+	private int turno;
+	
+	IMethods remoteMethods;
+	ArrayList<String[]> p;
+	public void dibujar() throws RemoteException {
+		int matriz[][]=remoteMethods.getMatriz();
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				System.out.print(matriz[i][j]+" ");
+			}
+			System.out.println("");
+		}
+		for (int i = 0; i < p.size(); i++) {
+			matriz[Integer.parseInt(p.get(i).toString().substring(0, 1))][Integer.parseInt(p.get(i).toString().substring(2))]=2;
+		}
+		
+	}
+	
+	public void run() throws RemoteException {
+		Conexion conexion = new Conexion();
+		remoteMethods= conexion.searchServer();
 			if (remoteMethods != null) {
 				//LOGIN
 				Scanner sc=new Scanner(System.in);
@@ -25,7 +40,7 @@ public class MainClient {
 				System.out.println("login :"+remoteMethods.login(nombre,contr));
 				remoteMethods.crearBarcos(nombre);
 				//posisiones de los barcos
-				ArrayList<String[]> p=new ArrayList<>();
+				p=new ArrayList<>();
 				for (int i = 0; i < 5; i++) {
 					p.add(new String[i+1]);
 					for (int j = 0; j < i+1; j++) {
@@ -34,7 +49,7 @@ public class MainClient {
 					remoteMethods.ponerBarco(nombre, i+"", p.get(i));
 				}
 				//indicacion de preparado
-				int turno=remoteMethods.listo();
+				turno=remoteMethods.listo();
 				
 				//espera de otros jugadores
 				while (!remoteMethods.isJuegoIniciado()) {
@@ -50,17 +65,12 @@ public class MainClient {
 				
 				System.out.println(turno);
 				//juego
-				while(true) {
+				int t=1;
+				while(t>0) {
+					t=remoteMethods.getTurno();
 					
-					
-					if(turno==remoteMethods.getTurno()) {
-						int matriz[][]=remoteMethods.getMatriz();
-						for (int i = 0; i < 15; i++) {
-							for (int j = 0; j < 15; j++) {
-								System.out.print(matriz[i][j]+" ");
-							}
-							System.out.println("");
-						}
+					if(turno==t) {
+						dibujar();
 						int dis=remoteMethods.disparo(sc.nextLine());
 						if(dis==0) {
 							System.out.println("le di");
@@ -71,14 +81,9 @@ public class MainClient {
 						}
 						
 						remoteMethods.turno();
-						matriz=remoteMethods.getMatriz();
-						for (int i = 0; i < 15; i++) {
-							for (int j = 0; j < 15; j++) {
-								System.out.print(matriz[i][j]+" ");
-							}
-							System.out.println("");
-						}
-					}else {
+						dibujar();
+					}	
+					else {
 						System.out.println("esperando otro jugador");
 						try {
 							Thread.sleep(3000);
@@ -93,8 +98,15 @@ public class MainClient {
 			}else{
 				System.out.println("Problemas con la conexion");
 			}
-		}catch (RemoteException e) {
-			System.out.println("Problema con los metodos remotos");
+		
+	}
+
+	public static void main(String[] args) {
+		try {
+			new MainClient().run();
+		} catch (RemoteException e) {
+			System.out.println("problema con los metodos remotos");
+			e.printStackTrace();
 		}
 	}
 
