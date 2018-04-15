@@ -238,7 +238,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				dibujar();
 				countTurnos++;
 				entroTurno=false;
-			}else {
+			}else if(turno!=t) {
 				lblFondo.setIcon(new ImageIcon("img/aguaEspera.jpg"));
 			}
 		} catch (RemoteException e1) {
@@ -275,7 +275,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				}else {
 					int t=remoteMethods.getTurno();
 					if(turno==t) {
-						//dibujar();
+						dibujar();
 
 						if(e.getX()>=13 && e.getX()<=589 && e.getY()>=13 && e.getY()<=589) {
 							int auxX=e.getX();
