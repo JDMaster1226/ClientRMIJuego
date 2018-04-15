@@ -33,7 +33,6 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	JLabel lblT;
 	ArrayList<Barco> barcos;
 	boolean movimientoBarcos;
-
 	private int turno;
 
 	private IMethods remoteMethods;
@@ -48,14 +47,15 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		addMouseMotionListener(this);
-		addMouseListener(this);
-
+		addMouseListener(this);		
+		
 		beginComponents();
-		addComponents();		
-
+		addComponents();
+		
 	}
 
 	public void beginComponents() {
+		
 
 		lblFondo= new JLabel("");
 		lblFondo.setSize(this.getWidth(), this.getHeight());	
@@ -76,7 +76,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 		btnNuevo.setText("Nuevo");
 		btnNuevo.addActionListener(this);
 
-		btnListo = new JButton("Listo");
+		btnListo = new JButton("Listoo");
 		btnListo.setEnabled(false);
 		btnListo.setBounds(702, 435, 89, 23);
 		btnListo.addActionListener(this);
@@ -261,30 +261,21 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 								}
 								cont+=36;
 							}
-							int dis=remoteMethods.disparo(auxX+","+auxY);
+							int posX = (auxX-13)/36;
+							int posY = (auxY-13)/36;
+							int dis=remoteMethods.disparo(posX+","+posY);
 							if(dis==0) {
 								System.out.println("le di");
-								JPanel j=new JPanel();
-								add(j);
-								j.setSize(33,33);
-								j.setBackground(Color.red);
-								j.setLocation(auxX, auxY);
+								disparo(Color.red, auxX, auxY);
 								remoteMethods.turno();
 							}else if(dis==-1) {
 								System.out.println("paila");
-								JPanel j=new JPanel();
-								add(j);
-								j.setSize(33,33);
-								j.setBackground(Color.black);
-								j.setLocation(auxX, auxY);
+								disparo(Color.GRAY, auxX, auxY);
 								remoteMethods.turno();
 							}else {
 								System.out.println("ya habia usado eso");
 							}
 						}
-
-
-
 						//dibujar();
 					}	
 					else {
@@ -296,7 +287,15 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				e1.printStackTrace();
 			}
 	}
-
+	public void disparo(Color c , int x, int y) {
+		remove(lblFondo);
+		JPanel j=new JPanel();
+		add(j);
+		j.setSize(33,33);
+		j.setBackground(c);
+		j.setLocation(x, y);
+		add(lblFondo);
+	}
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(movimientoBarcos) {
