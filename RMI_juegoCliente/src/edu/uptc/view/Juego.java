@@ -60,14 +60,16 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 			@Override
 			public void run() {
-				int t=100;
+				int t;
 				try {
-					while(t>0 && t!=turno) {
+					while(true) {
 						t=remoteMethods.getTurno();
-						System.out.println("en espera");
+						if(t==turno) {
+							dibujar();
+						}
 						Thread.sleep(3000);
 					}
-					dibujar();
+					
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -198,6 +200,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 					remoteMethods.ponerBarco(nombre, (i+1)+"", barcos.get(i).getPosiciones());
 				}
 				turno=remoteMethods.listo();
+				hilo.start();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -319,7 +322,6 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 								System.out.println("paila");
 								disparo(Color.GRAY, auxX, auxY);
 								entroTurno=true;
-								hilo.start();
 								remoteMethods.turno();
 							}else {
 								System.out.println("ya habia usado eso");
