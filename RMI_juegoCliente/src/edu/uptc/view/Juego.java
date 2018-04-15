@@ -360,8 +360,8 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 	public void dibujar() throws RemoteException {
 		int matriz[][]=remoteMethods.getMatriz();	
-		for (int i = 0; i < 15; i++) {
-			for (int j = 0; j < 15; j++) {
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz.length; j++) {
 				if(matriz[i][j]!=0) {
 					int x=(i*36)+13;
 					int y=(j*36)+13;
