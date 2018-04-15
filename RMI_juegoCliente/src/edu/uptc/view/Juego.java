@@ -41,7 +41,8 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	private JPanel cuadro;
 	private int countTurnos;
 	private boolean entroTurno;
-	
+	private Thread hilo;
+
 	public Juego() {
 
 		setBackground(SystemColor.activeCaption);
@@ -54,6 +55,24 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 		beginComponents();
 		addComponents();
+
+		hilo=new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				int t=100;
+				try {
+					while(t>0 && t!=turno) {
+						t=remoteMethods.getTurno();
+						System.out.println("en espera");
+					}
+					dibujar();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 
 	}
 
@@ -208,7 +227,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				int auxY=e.getY();
 				cuadro.setLocation(auxX, auxY);
 			}else {
-				
+
 				cuadro.setLocation(-33, -33);
 			}
 			add(lblFondo);
@@ -226,30 +245,16 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		int t;
-		try {
-			t = remoteMethods.getTurno();
-			
-			if(turno==t && entroTurno) {
-				lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
-				if (countTurnos==0) {
-					JOptionPane.showMessageDialog(null, "ubieron "+remoteMethods.getNumeroExplociones()+" explociones");
-				}
-				dibujar();
-				countTurnos++;
-				entroTurno=false;
-			}else if(turno!=t) {
-				lblFondo.setIcon(new ImageIcon("img/aguaEspera.jpg"));
-			}
-		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
+
+	}
+
+	public void espera() {
+
 
 	}
 
@@ -275,7 +280,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				}else {
 					int t=remoteMethods.getTurno();
 					if(turno==t) {
-						dibujar();
+						//dibujar();
 
 						if(e.getX()>=13 && e.getX()<=589 && e.getY()>=13 && e.getY()<=589) {
 							int auxX=e.getX();
@@ -310,6 +315,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 								System.out.println("paila");
 								disparo(Color.GRAY, auxX, auxY);
 								entroTurno=true;
+								hilo.start();
 								remoteMethods.turno();
 							}else {
 								System.out.println("ya habia usado eso");
