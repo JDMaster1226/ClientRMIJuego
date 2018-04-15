@@ -75,9 +75,9 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 					JOptionPane.showMessageDialog(null, "ubo "+remoteMethods.getNumeroExplociones()+" explociones");
 					while(t>0) {
 						t=remoteMethods.getTurno();
+						dibujar();
 						if(t==turno) {
 							lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
-							dibujar();
 						}else {
 							lblFondo.setIcon(new ImageIcon("img/aguaEspera.jpg"));
 						}
@@ -306,10 +306,11 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 			}				
 		} else
 			try {
+				int t=1;
 				if(!remoteMethods.isJuegoIniciado()) {
 					JOptionPane.showMessageDialog(null, "esperando otros jugadores...");
-				}else if(remoteMethods.isJuegoIniciado()) {
-					int t=remoteMethods.getTurno();
+				}else if(remoteMethods.isJuegoTerminado()) {
+					t=remoteMethods.getTurno();
 					if(turno==t) {
 						//dibujar();
 
