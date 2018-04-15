@@ -65,9 +65,13 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 					while(t>0 && t!=turno) {
 						t=remoteMethods.getTurno();
 						System.out.println("en espera");
+						Thread.sleep(3000);
 					}
 					dibujar();
 				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
