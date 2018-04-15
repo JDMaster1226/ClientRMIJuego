@@ -208,6 +208,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				int auxY=e.getY();
 				cuadro.setLocation(auxX, auxY);
 			}else {
+				
 				cuadro.setLocation(-33, -33);
 			}
 			add(lblFondo);
@@ -228,9 +229,17 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 		int t;
 		try {
 			t = remoteMethods.getTurno();
+			
 			if(turno==t && entroTurno) {
+				lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
+				if (countTurnos==0) {
+					JOptionPane.showMessageDialog(null, "se chocaron "+remoteMethods.getNumeroExplociones()+" barcos");
+				}
 				dibujar();
+				countTurnos++;
 				entroTurno=false;
+			}else {
+				lblFondo.setIcon(new ImageIcon("img/aguaEspera.jpg"));
 			}
 		} catch (RemoteException e1) {
 			// TODO Auto-generated catch block
