@@ -15,8 +15,7 @@ public class MainClient {
 	ArrayList<String[]> p;
 	
 	public void dibujar() throws RemoteException {
-		int matriz[][]=remoteMethods.getMatriz();
-		
+		int matriz[][]=remoteMethods.getMatriz();	
 //		for (int i = 0; i < p.size(); i++) {
 //			for (int j = 0; j < p.get(i).length; j++) {
 //				

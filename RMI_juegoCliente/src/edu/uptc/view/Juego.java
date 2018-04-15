@@ -39,6 +39,9 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	ArrayList<String[]> p;
 	private String nombre;
 	private JPanel cuadro;
+	private int countTurnos;
+	private boolean entroTurno;
+	
 	public Juego() {
 
 		setBackground(SystemColor.activeCaption);
@@ -48,15 +51,17 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		addMouseMotionListener(this);
 		addMouseListener(this);		
-		
+
 		beginComponents();
 		addComponents();
-		
+
 	}
 
 	public void beginComponents() {
-		
 
+		turno=-5;
+		countTurnos=0;
+		entroTurno=true;
 		lblFondo= new JLabel("");
 		lblFondo.setSize(this.getWidth(), this.getHeight());	
 		lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
@@ -73,6 +78,8 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 		cuadro=new JPanel();
 		cuadro.setSize(33,33);
 		cuadro.setBackground(Color.GRAY);
+		cuadro.setLocation(-33, -33);
+
 		btnNuevo = new JButton();
 		btnNuevo.setBounds(670, 10, 100, 40);		
 		btnNuevo.setText("Nuevo");
@@ -194,13 +201,20 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	}
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		remove(lblFondo);
-		if(!movimientoBarcos) {
-			int auxX=e.getX();
-			int auxY=e.getY();
-			cuadro.setLocation(auxX, auxY);
+		try {
+			remove(lblFondo);
+			if(!movimientoBarcos && turno==remoteMethods.getTurno()) {
+				int auxX=e.getX();
+				int auxY=e.getY();
+				cuadro.setLocation(auxX, auxY);
+			}else {
+				cuadro.setLocation(-33, -33);
+			}
+			add(lblFondo);
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		add(lblFondo);
 	}
 
 	@Override
@@ -211,8 +225,17 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-
-
+		int t;
+		try {
+			t = remoteMethods.getTurno();
+			if(turno==t && entroTurno) {
+				dibujar();
+				entroTurno=false;
+			}
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	@Override
@@ -242,7 +265,6 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 					JOptionPane.showMessageDialog(null, "esperando otros jugadores...");
 				}else {
 					int t=remoteMethods.getTurno();
-
 					if(turno==t) {
 						//dibujar();
 
@@ -274,10 +296,11 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 							if(dis==0) {
 								System.out.println("le di");
 								disparo(Color.red, auxX, auxY);
-								remoteMethods.turno();
+								//remoteMethods.turno();
 							}else if(dis==-1) {
 								System.out.println("paila");
 								disparo(Color.GRAY, auxX, auxY);
+								entroTurno=true;
 								remoteMethods.turno();
 							}else {
 								System.out.println("ya habia usado eso");
@@ -295,6 +318,24 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				e1.printStackTrace();
 			}
 	}
+
+	public void dibujar() throws RemoteException {
+		int matriz[][]=remoteMethods.getMatriz();	
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				if(matriz[i][j]!=0) {
+					int x=(i+36)+13;
+					int y=(j+36)+13;
+					if(matriz[i][j]==1) {
+						disparo(Color.GRAY, x, y);
+					}else if(matriz[i][j]==8) {
+						disparo(Color.RED, x, y);
+					}
+				}
+			}
+		}
+	}
+
 	public void disparo(Color c , int x, int y) {
 		remove(lblFondo);
 		JPanel j=new JPanel();

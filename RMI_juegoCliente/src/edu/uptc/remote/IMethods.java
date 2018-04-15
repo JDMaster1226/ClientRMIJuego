@@ -18,4 +18,5 @@ public interface IMethods extends Remote{
 	public int[][] getMatriz() throws RemoteException;
 	public int getTurno() throws RemoteException;
 	public boolean estasVivo(String nombre) throws RemoteException;
+	public int getNumeroExplociones() throws RemoteException;
 }
