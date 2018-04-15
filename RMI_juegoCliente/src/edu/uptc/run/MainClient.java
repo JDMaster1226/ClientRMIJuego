@@ -13,17 +13,23 @@ public class MainClient {
 	
 	IMethods remoteMethods;
 	ArrayList<String[]> p;
+	
 	public void dibujar() throws RemoteException {
 		int matriz[][]=remoteMethods.getMatriz();
+		
+//		for (int i = 0; i < p.size(); i++) {
+//			for (int j = 0; j < p.get(i).length; j++) {
+//				
+//				matriz[Integer.parseInt(p.get(i)[j].substring(0, p.get(i)[j].indexOf(",")))][Integer.parseInt(p.get(i)[j].substring(p.get(i)[j].indexOf(",")+1))]=2;
+//			}
+//		}
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				System.out.print(matriz[i][j]+" ");
 			}
 			System.out.println("");
 		}
-		for (int i = 0; i < p.size(); i++) {
-			matriz[Integer.parseInt(p.get(i).toString().substring(0, 1))][Integer.parseInt(p.get(i).toString().substring(2))]=2;
-		}
+		System.out.println();
 		
 	}
 	
@@ -36,8 +42,12 @@ public class MainClient {
 				System.out.println("nombre y contraseña :...");
 				String nombre=sc.nextLine();
 				String contr=sc.nextLine();
+				
+				
 				System.out.println("user add :"+remoteMethods.addUser(nombre,contr));
 				System.out.println("login :"+remoteMethods.login(nombre,contr));
+				
+				
 				remoteMethods.crearBarcos(nombre);
 				//posisiones de los barcos
 				p=new ArrayList<>();
@@ -94,6 +104,12 @@ public class MainClient {
 					}
 					
 				}
+				System.out.println("fin");
+				if(remoteMethods.estasVivo(nombre)) {
+					System.out.println("ganaste");
+				}else {
+					System.out.println("perdiste");
+				}
 				
 			}else{
 				System.out.println("Problemas con la conexion");
@@ -108,6 +124,7 @@ public class MainClient {
 			System.out.println("problema con los metodos remotos");
 			e.printStackTrace();
 		}
+		
 	}
 
 }
