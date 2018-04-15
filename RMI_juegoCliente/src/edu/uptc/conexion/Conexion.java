@@ -11,7 +11,7 @@ public class Conexion {
 	
 	public IMethods searchServer(){
 		try {
-			Registry registry = LocateRegistry.getRegistry("192.168.0.20", 1234);
+			Registry registry = LocateRegistry.getRegistry("192.168.1.4", 1234);
 			IMethods remoteMethods = (IMethods) registry.lookup("Hello");
 			return remoteMethods;
 		} catch (RemoteException e) {

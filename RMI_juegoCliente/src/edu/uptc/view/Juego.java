@@ -36,7 +36,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 	private int turno;
 
-	IMethods remoteMethods;
+	private IMethods remoteMethods;
 	ArrayList<String[]> p;
 	private String nombre;
 
@@ -163,8 +163,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				btnRandom.setEnabled(false);
 				btnListo.setEnabled(false);
 				for (int i = 0; i < 6; i++) {
-
-					remoteMethods.ponerBarco(nombre, i+"", barcos.get(i).getPosiciones());
+					remoteMethods.ponerBarco(nombre, (i+1)+"", barcos.get(i).getPosiciones());
 				}
 				turno=remoteMethods.listo();
 			} catch (RemoteException e1) {
@@ -395,7 +394,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 	public void run() throws RemoteException {
 		Conexion conexion = new Conexion();
-		remoteMethods= conexion.searchServer();
+		remoteMethods = conexion.searchServer();
 
 		if (remoteMethods != null) {
 			Scanner sc=new Scanner(System.in);
@@ -406,8 +405,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 			System.out.println("login :"+remoteMethods.login(nombre,contr));
 
 			remoteMethods.crearBarcos(nombre);
-			Juego juego = new Juego();
-			juego.setVisible(true);
+			setVisible(true);
 		}
 	}
 
