@@ -233,7 +233,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 			if(turno==t && entroTurno) {
 				lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
 				if (countTurnos==0) {
-					JOptionPane.showMessageDialog(null, "se chocaron "+remoteMethods.getNumeroExplociones()+" barcos");
+					JOptionPane.showMessageDialog(null, "ubieron "+remoteMethods.getNumeroExplociones()+" explociones");
 				}
 				dibujar();
 				countTurnos++;
@@ -333,8 +333,9 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				if(matriz[i][j]!=0) {
-					int x=(i+36)+13;
-					int y=(j+36)+13;
+					int x=(i*36)+13;
+					int y=(j*36)+13;
+					System.out.println(x+","+y+"=="+i+","+j);
 					if(matriz[i][j]==1) {
 						disparo(Color.GRAY, x, y);
 					}else if(matriz[i][j]==8) {
