@@ -60,16 +60,33 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 			@Override
 			public void run() {
-				int t;
+				int t=1;
 				try {
-					while(true) {
+					while (!remoteMethods.isJuegoIniciado()) {
+						System.out.println("esperando otros jugadores");
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					while(t>0) {
 						t=remoteMethods.getTurno();
 						if(t==turno) {
+							lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
 							dibujar();
+						}else {
+							lblFondo.setIcon(new ImageIcon("img/aguaEspera.jpg"));
 						}
 						Thread.sleep(3000);
 					}
-					
+					if(remoteMethods.estasVivo(nombre)) {
+						JOptionPane.showMessageDialog(null, "Ganaste");
+					}else {
+						JOptionPane.showMessageDialog(null, "perdiste");
+					}
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
