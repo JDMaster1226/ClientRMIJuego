@@ -72,6 +72,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 						}
 						
 					}
+					JOptionPane.showMessageDialog(null, "ubo "+remoteMethods.getNumeroExplociones()+" explociones");
 					while(t>0) {
 						t=remoteMethods.getTurno();
 						if(t==turno) {
@@ -214,7 +215,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				btnRandom.setEnabled(false);
 				btnListo.setEnabled(false);
 				for (int i = 0; i < 6; i++) {
-					remoteMethods.ponerBarco(nombre, (i+1)+"", barcos.get(i).getPosiciones());
+					remoteMethods.ponerBarco(nombre, i+"", barcos.get(i).getPosiciones());
 				}
 				turno=remoteMethods.listo();
 				hilo.start();
