@@ -119,8 +119,8 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 		}			
 		cuadro=new JPanel();
-		cuadro.setSize(33,33);
-		cuadro.setBackground(Color.GRAY);
+		cuadro.setSize(3,3);
+		cuadro.setBackground(Color.yellow);
 		cuadro.setLocation(-33, -33);
 
 		btnNuevo = new JButton();
@@ -246,16 +246,22 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		try {
-			remove(lblFondo);
-			if(!movimientoBarcos && turno==remoteMethods.getTurno()) {
+			if(!movimientoBarcos) {
+				remove(lblFondo);
+				if(!movimientoBarcos && turno==remoteMethods.getTurno()) {
+					int auxX=e.getX();
+					int auxY=e.getY();
+					cuadro.setLocation(auxX, auxY);
+				}else {
+
+					cuadro.setLocation(-33, -33);
+				}
+				add(lblFondo);
+			}else {
 				int auxX=e.getX();
 				int auxY=e.getY();
 				cuadro.setLocation(auxX, auxY);
-			}else {
-
-				cuadro.setLocation(-33, -33);
 			}
-			add(lblFondo);
 		} catch (RemoteException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -291,7 +297,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 				barco = barcos.get(i);
 
-				if(new Rectangle(barco.getX(), barco.getY()+33, barco.getWidth()-10, barco.getHeight()-10).contains(e.getPoint())) {
+				if(new Rectangle(barco.getX(), barco.getY(), barco.getWidth(), barco.getHeight()).contains(e.getPoint())) {
 					barco.setAdentro(true);	
 					if(e.getModifiersEx()==MouseEvent.BUTTON3_DOWN_MASK) {
 						barco.vertical();		
@@ -302,7 +308,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 			try {
 				if(!remoteMethods.isJuegoIniciado()) {
 					JOptionPane.showMessageDialog(null, "esperando otros jugadores...");
-				}else {
+				}else if(remoteMethods.isJuegoIniciado()) {
 					int t=remoteMethods.getTurno();
 					if(turno==t) {
 						//dibujar();
@@ -351,6 +357,8 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 						JOptionPane.showMessageDialog(null, "esperando otro jugador");
 						System.out.println("esperando otro jugador");
 					}
+				}else {
+					lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
 				}
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
