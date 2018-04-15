@@ -83,6 +83,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 						}
 						Thread.sleep(3000);
 					}
+					lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
 					if(remoteMethods.estasVivo(nombre)) {
 						JOptionPane.showMessageDialog(null, "Ganaste");
 					}else {
@@ -360,6 +361,11 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 					}
 				}else {
 					lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
+					if(remoteMethods.estasVivo(nombre)) {
+						JOptionPane.showMessageDialog(null, "Ganaste");
+					}else {
+						JOptionPane.showMessageDialog(null, "perdiste");
+					}
 				}
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
