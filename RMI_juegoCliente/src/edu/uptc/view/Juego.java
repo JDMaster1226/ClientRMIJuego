@@ -38,7 +38,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	private IMethods remoteMethods;
 	ArrayList<String[]> p;
 	private String nombre;
-
+	private JPanel cuadro;
 	public Juego() {
 
 		setBackground(SystemColor.activeCaption);
@@ -70,7 +70,9 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 			barcos.get(i).setVisible(false);
 
 		}			
-
+		cuadro=new JPanel();
+		cuadro.setSize(33,33);
+		cuadro.setBackground(Color.GRAY);
 		btnNuevo = new JButton();
 		btnNuevo.setBounds(670, 10, 100, 40);		
 		btnNuevo.setText("Nuevo");
@@ -102,7 +104,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 		for (int i = 0; i < barcos.size(); i++) {
 			getContentPane().add(barcos.get(i));
 		}
-
+		add(cuadro);
 		getContentPane().add(btnRandom);		
 		getContentPane().add(btnListo);
 		getContentPane().add(btnNuevo);
@@ -192,8 +194,13 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	}
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		remove(lblFondo);
+		if(!movimientoBarcos) {
+			int auxX=e.getX();
+			int auxY=e.getY();
+			cuadro.setLocation(auxX, auxY);
+		}
+		add(lblFondo);
 	}
 
 	@Override
@@ -279,6 +286,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 						//dibujar();
 					}	
 					else {
+						JOptionPane.showMessageDialog(null, "esperando otro jugador");
 						System.out.println("esperando otro jugador");
 					}
 				}
