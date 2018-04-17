@@ -67,8 +67,9 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 						try {
 							Thread.sleep(3000);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
+							System.out.println("error de hilo!!!!!!!!");
 							e.printStackTrace();
+							System.out.println("error de hilo!!!!!!!!");
 						}
 						
 					}
@@ -179,7 +180,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				barco.vertical();
 			}
 			llenarBarco(barco, x, y);
-			System.out.println(count+"="+x+","+y+"   al="+al+" barc="+barco.isHorizontal());
+			//System.out.println(count+"="+x+","+y+"   al="+al+" barc="+barco.isHorizontal());
 			if(!isChoque(barco) && (x+barco.getAncho())<589 && (y+barco.getAlto())<589) {
 				barco.setLocation(x, y);
 				count++;
@@ -191,6 +192,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	public void actionPerformed( ActionEvent e ) {
 
 		if(e.getSource()==btnNuevo) {
+			btnNuevo.setEnabled(false);
 			Barco barco;
 			for (int i = 0; i < barcos.size(); i++) {
 				barco = barcos.get(i);	
@@ -310,7 +312,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				int t=1;
 				if(!remoteMethods.isJuegoIniciado()) {
 					JOptionPane.showMessageDialog(null, "esperando otros jugadores...");
-				}else if(remoteMethods.isJuegoTerminado()) {
+				}else if(remoteMethods.isJuegoTerminado()&&remoteMethods.estasVivo(nombre)) {
 					t=remoteMethods.getTurno();
 					if(turno==t) {
 						//dibujar();
@@ -380,7 +382,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				if(matriz[i][j]!=0) {
 					int x=(i*36)+13;
 					int y=(j*36)+13;
-					System.out.println(x+","+y+"=="+i+","+j);
+					//System.out.println(x+","+y+"=="+i+","+j);
 					if(matriz[i][j]==1) {
 						disparo(Color.GRAY, x, y);
 					}else if(matriz[i][j]==8) {
@@ -465,7 +467,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	public void llenarBarco(Barco barco ,int x ,int y) {
 		int posX = (x-13)/36;
 		int posY = (y-13)/36;
-		lblT.setText(x+"pop"+y);
+		lblT.setText(x+"pod"+y);
 		for (int j = 0; j < barco.getPiezas(); j++) {
 			barco.agregarPos(posX+","+posY, j);
 			if(barco.isHorizontal()) {
