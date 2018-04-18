@@ -34,10 +34,11 @@ public class MainClient {
 	
 	public void run() throws RemoteException {
 		Conexion conexion = new Conexion();
-		remoteMethods= conexion.searchServer();
+		Scanner sc=new Scanner(System.in);
+		remoteMethods= conexion.searchServer(sc.nextLine());
 			if (remoteMethods != null) {
 				//LOGIN
-				Scanner sc=new Scanner(System.in);
+				
 				System.out.println("nombre y contraseña :...");
 				String nombre=sc.nextLine();
 				String contr=sc.nextLine();

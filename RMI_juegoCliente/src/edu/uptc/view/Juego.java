@@ -25,22 +25,18 @@ import edu.uptc.remote.IMethods;
 
 public class Juego extends JFrame implements ActionListener, MouseMotionListener ,MouseListener{
 
-	JLabel lblFondo;
-	JButton btnNuevo;
-	JButton btnListo;
-	JButton btnRandom;
-	JLabel lblRejilla;
-	JLabel lblT;
-	ArrayList<Barco> barcos;
-	boolean movimientoBarcos;
+	private JLabel lblFondo;
+	private JButton btnNuevo;
+	private JButton btnListo;
+	private JButton btnRandom;
+	private JLabel lblRejilla;
+	private JLabel lblT;
+	private ArrayList<Barco> barcos;
+	private boolean movimientoBarcos;
 	private int turno;
-
 	private IMethods remoteMethods;
-	ArrayList<String[]> p;
 	private String nombre;
 	private JPanel cuadro;
-	private int countTurnos;
-	private boolean entroTurno;
 	private Thread hilo;
 
 	public Juego() {
@@ -82,7 +78,13 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 						}else {
 							lblFondo.setIcon(new ImageIcon("img/aguaEspera.jpg"));
 						}
-						Thread.sleep(3000);
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							System.out.println("error de hilo!!!!!!!!");
+							e.printStackTrace();
+							System.out.println("error de hilo!!!!!!!!");   
+						}
 					}
 					lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
 					if(remoteMethods.estasVivo(nombre)) {
@@ -92,11 +94,10 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 					}
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
+					System.out.println("error REMOTO de hilo!!!!!!!!");
 					e.printStackTrace();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					System.out.println("error REMOTO de hilo!!!!!!!!");
+				} 
 			}
 		});
 
@@ -105,8 +106,6 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	public void beginComponents() {
 
 		turno=-5;
-		countTurnos=0;
-		entroTurno=true;
 		lblFondo= new JLabel("");
 		lblFondo.setSize(this.getWidth(), this.getHeight());	
 		lblFondo.setIcon(new ImageIcon("img/agua.jpg"));
@@ -250,8 +249,8 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 	public void mouseMoved(MouseEvent e) {
 		try {
 			if(!movimientoBarcos) {
-				remove(lblFondo);
-				if(!movimientoBarcos && turno==remoteMethods.getTurno()) {
+				//remove(lblFondo);
+				if(turno==remoteMethods.getTurno()) {
 					int auxX=e.getX();
 					int auxY=e.getY();
 					cuadro.setLocation(auxX, auxY);
@@ -259,7 +258,7 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 					cuadro.setLocation(-33, -33);
 				}
-				add(lblFondo);
+				//add(lblFondo);
 			}else {
 				int auxX=e.getX();
 				int auxY=e.getY();
@@ -315,8 +314,6 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 				}else if(remoteMethods.isJuegoTerminado()&&remoteMethods.estasVivo(nombre)) {
 					t=remoteMethods.getTurno();
 					if(turno==t) {
-						//dibujar();
-
 						if(e.getX()>=13 && e.getX()<=589 && e.getY()>=13 && e.getY()<=589) {
 							int auxX=e.getX();
 							int auxY=e.getY();
@@ -349,7 +346,6 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 							}else if(dis==-1) {
 								System.out.println("paila");
 								disparo(Color.GRAY, auxX, auxY);
-								entroTurno=true;
 								remoteMethods.turno();
 							}else {
 								System.out.println("ya habia usado eso");
@@ -499,10 +495,10 @@ public class Juego extends JFrame implements ActionListener, MouseMotionListener
 
 	public void run() throws RemoteException {
 		Conexion conexion = new Conexion();
-		remoteMethods = conexion.searchServer();
+		Scanner sc=new Scanner(System.in);
+		remoteMethods = conexion.searchServer(sc.nextLine());
 
 		if (remoteMethods != null) {
-			Scanner sc=new Scanner(System.in);
 			System.out.println("nombre y contraseña :...");
 			nombre=sc.nextLine();
 			String contr=sc.nextLine();				

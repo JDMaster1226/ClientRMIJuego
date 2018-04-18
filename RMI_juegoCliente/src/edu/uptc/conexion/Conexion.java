@@ -9,9 +9,9 @@ import edu.uptc.remote.IMethods;
 
 public class Conexion {
 	
-	public IMethods searchServer(){
+	public IMethods searchServer(String ip){
 		try {
-			Registry registry = LocateRegistry.getRegistry("192.168.1.4", 1234);
+			Registry registry = LocateRegistry.getRegistry(ip, 1234);
 			IMethods remoteMethods = (IMethods) registry.lookup("Hello");
 			return remoteMethods;
 		} catch (RemoteException e) {
